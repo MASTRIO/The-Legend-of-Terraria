@@ -1,2 +1,0 @@
-# The Legend of Terraria
- 
