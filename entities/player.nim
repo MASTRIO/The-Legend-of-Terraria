@@ -22,9 +22,8 @@ proc update*(player: Player, delta_time: float32): Player =
 
 proc draw*(player: Player) =
   setSpritesheet(spritesheetID["player"])
+  spr(1, player.position[0] - 1, player.position[1] + 11, 1, 1, true, true)
   spr(0, player.position[0], player.position[1])
-
-  spr(0, player.position[0], player.position[1] + 10, 10, 14, true, true)
 
   #setColor(5)
   #circ(player.position[0], player.position[1], 3)
