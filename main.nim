@@ -16,7 +16,7 @@ var colour_count = 0
 var camera_offset = [0, 0]
 
 proc gameInit() =
-  #setPalette(loadPalettePico8())
+  #setPalette(loadPaletteFromImage("palettes/colours.png"))
   hideMouse()
 
   # Load Sprites/Fonts
@@ -44,6 +44,7 @@ proc gameInit() =
       amogus[0] += 1
 
 proc gameUpdate(dt: float32) =
+
   the_player = the_player.update()
   the_player.position = process_velocity(dt, the_player.position, the_player.velocity, the_player.speed)
   the_player.velocity = [0, 0]
@@ -68,6 +69,19 @@ proc gameUpdate(dt: float32) =
     tile = tile.init()
     surface_floor_tilemap.add(tile)
   
+  var tile_counter = 0
+  for tile in surface_wall_tilemap:
+    if tile.animated:
+      surface_wall_tilemap[tile_counter].animation.time_counter += dt
+
+      if tile.animation.time_counter >= tile.animation.spf:
+        surface_wall_tilemap[tile_counter].animation.time_counter -= tile.animation.spf
+        if tile.animation.current_frame == 2:
+          surface_wall_tilemap[tile_counter].animation.current_frame = 0
+        else:
+          surface_wall_tilemap[tile_counter].animation.current_frame += 1
+    tile_counter += 1
+
   #echo "\n------------------------------------\n\n", raft_tilemap
 
 proc gameDraw() =
@@ -109,7 +123,10 @@ proc gameDraw() =
       tile.coords[1] < (toInt(screenHeight / 2) + the_player.position[1] + 10)
       :
       setSpritesheet(spritesheetID[tile.spritesheet])
-      spr(tile.sprite, tile.coords[0], tile.coords[1])
+      if tile.animated:
+        spr(tile.animation.frames[tile.animation.current_frame], tile.coords[0], tile.coords[1])
+      else:
+        spr(tile.sprite, tile.coords[0], tile.coords[1])
 
   the_player.draw()
 
@@ -117,12 +134,12 @@ proc gameDraw() =
   setCamera(0, 0)
 
   setColor(10)
-  circ(mouse()[0], mouse()[1], 2)
+  circ(mouse()[0], mouse()[1], 1)
 
 nico.init("mastrio", "legend_of_terraria")
 
 #fixedSize(true)
 #integerScale(true)
 
-nico.createWindow("The Legend of Terraria", 250, 128, 4, false)
+nico.createWindow("The Legend of Terraria", 330, 170, 4, false)
 nico.run(gameInit, gameUpdate, gameDraw)
