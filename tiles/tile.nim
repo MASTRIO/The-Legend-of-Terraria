@@ -2,6 +2,10 @@ import ../devtools
 
 type
   TileType* = enum
+    # Objects
+    CHIPPYS_COUCH
+
+    # Surface floor
     GRASS_FLOOR
 
   Tile* = object
