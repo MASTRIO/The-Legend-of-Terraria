@@ -35,7 +35,7 @@ proc gameInit() =
   # Create world
   # TODO make actual world generation
   var amogus = [0, 0]
-  for num in -1000..1000:
+  for num in 0..1000:
     echo num
     var surface_tile = wooden_floor([amogus[0], amogus[1]])
     surface_floor_tilemap.add(surface_tile)
