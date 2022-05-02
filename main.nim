@@ -3,7 +3,7 @@ import nico
 import entities/player
 import data
 import tiles/tile
-import tiles/grass_floor
+import tiles/tile_list
 import physics_engine
 
 var the_player = Player(
@@ -22,10 +22,14 @@ proc gameInit() =
   # Load Sprites/Fonts
   loadFont(0, "fonts/font.png")
 
+  loadSpritesheet(spritesheetID["cursor"], "cursor.png", 7, 7) 
+
   loadSpritesheet(spritesheetID["player"], "entities/player.png", 14, 14) 
   loadSpritesheet(spritesheetID["amogus"], "amogus.png", 8, 8) 
   
   loadSpritesheet(spritesheetID["objects"], "tiles/objects.png", 12, 12)
+  loadSpritesheet(spritesheetID["generic_floor"], "tiles/generic_floor.png", 12, 12)
+  loadSpritesheet(spritesheetID["generic_walls"], "tiles/generic_walls.png", 12, 12)
   loadSpritesheet(spritesheetID["surface_ground"], "tiles/surface_ground.png", 12, 12)
 
   # Create world
@@ -33,8 +37,7 @@ proc gameInit() =
   var amogus = [0, 0]
   for num in -1000..1000:
     echo num
-    var surface_tile = grass_floor([amogus[0] * 10, amogus[1] * 10])
-    surface_tile = surface_tile.init()
+    var surface_tile = wooden_floor([amogus[0], amogus[1]])
     surface_floor_tilemap.add(surface_tile)
 
     if amogus[0] > 100:
@@ -42,9 +45,12 @@ proc gameInit() =
       amogus[1] += 1
     else:
       amogus[0] += 1
+  
+  #surface_floor_tilemap[0] = wooden_floor([0, 0])
+  #surface_floor_tilemap[1] = wooden_floor([1, 0])
+  #surface_floor_tilemap[2] = wooden_floor([1, 1])
 
 proc gameUpdate(dt: float32) =
-
   the_player = the_player.update()
   the_player.position = process_velocity(dt, the_player.position, the_player.velocity, the_player.speed)
   the_player.velocity = [0, 0]
@@ -66,7 +72,6 @@ proc gameUpdate(dt: float32) =
 
   if key(K_l):
     var tile = grass_floor(the_player.position)
-    tile = tile.init()
     surface_floor_tilemap.add(tile)
   
   var tile_counter = 0
@@ -133,13 +138,13 @@ proc gameDraw() =
   # Draw UI
   setCamera(0, 0)
 
-  setColor(10)
-  circ(mouse()[0], mouse()[1], 1)
+  setSpritesheet(spritesheetID["cursor"])
+  spr(0, mouse()[0] - 3, mouse()[1] - 3)
 
 nico.init("mastrio", "legend_of_terraria")
 
 #fixedSize(true)
 #integerScale(true)
 
-nico.createWindow("The Legend of Terraria", 330, 170, 4, false)
+nico.createWindow("The Legend of Terraria", 330, 170, 3, false)
 nico.run(gameInit, gameUpdate, gameDraw)

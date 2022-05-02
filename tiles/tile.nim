@@ -6,12 +6,18 @@ type
     CHIPPYS_COUCH
     TORCH
 
+    # Generic floor
+    WOODEN_FLOOR
+
+    # Generic walls
+    WOODEN_WALL
+
     # Surface floor
     GRASS_FLOOR
 
   TileAnimation* = object
     spf*: float32
-    frames*: array[3, int]
+    frames*: seq[int] #array[3, int]
     current_frame*: int
     time_counter*: float32
 
@@ -23,10 +29,8 @@ type
     animated*: bool
     animation*: TileAnimation
 
-proc init*(tile: Tile): Tile =
-  var tile = tile
-
-  tile.coords[0] = round_to_int(tile.coords[0], 12)
-  tile.coords[1] = round_to_int(tile.coords[1], 12)
-
-  return tile
+proc create_tile_pos*(position: array[2, int]): array[2, int] =
+  var position = position
+  position[0] = round_to_int(position[0] * 10, 12)
+  position[1] = round_to_int(position[1] * 10, 12)
+  return position
