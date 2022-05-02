@@ -12,6 +12,9 @@ type
     # Generic walls
     WOODEN_WALL
 
+    # Liquids
+    WATER
+
     # Surface floor
     GRASS_FLOOR
 

@@ -10,7 +10,8 @@ let spritesheetID* = {
   "objects": 3,
   "cursor": 4,
   "generic_floor": 5,
-  "generic_walls": 6
+  "generic_walls": 6,
+  "liquids": 7
 }.toTable
 
 # Tilemaps

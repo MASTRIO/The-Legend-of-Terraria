@@ -30,6 +30,7 @@ proc gameInit() =
   loadSpritesheet(spritesheetID["objects"], "tiles/objects.png", 12, 12)
   loadSpritesheet(spritesheetID["generic_floor"], "tiles/generic_floor.png", 12, 12)
   loadSpritesheet(spritesheetID["generic_walls"], "tiles/generic_walls.png", 12, 12)
+  loadSpritesheet(spritesheetID["liquids"], "tiles/liquids.png", 12, 12)
   loadSpritesheet(spritesheetID["surface_ground"], "tiles/surface_ground.png", 12, 12)
 
   # Create world
@@ -37,7 +38,7 @@ proc gameInit() =
   var amogus = [0, 0]
   for num in 0..1000:
     echo num
-    var surface_tile = wooden_floor([amogus[0], amogus[1]])
+    var surface_tile = grass_floor([amogus[0], amogus[1]])
     surface_floor_tilemap.add(surface_tile)
 
     if amogus[0] > 100:
@@ -71,8 +72,7 @@ proc gameUpdate(dt: float32) =
     colour_count += 1
 
   if key(K_l):
-    var tile = grass_floor(the_player.position)
-    surface_floor_tilemap.add(tile)
+    surface_floor_tilemap.add(water(the_player.position))
   
   var tile_counter = 0
   for tile in surface_wall_tilemap:
@@ -81,11 +81,24 @@ proc gameUpdate(dt: float32) =
 
       if tile.animation.time_counter >= tile.animation.spf:
         surface_wall_tilemap[tile_counter].animation.time_counter -= tile.animation.spf
-        if tile.animation.current_frame == 2:
+        if tile.animation.current_frame == tile.animation.frames.len() - 1:
           surface_wall_tilemap[tile_counter].animation.current_frame = 0
         else:
           surface_wall_tilemap[tile_counter].animation.current_frame += 1
     tile_counter += 1
+
+    var second_tile_counter = 0
+    for tile in surface_floor_tilemap:
+      if tile.animated:
+        surface_floor_tilemap[second_tile_counter].animation.time_counter += dt
+
+        if tile.animation.time_counter >= tile.animation.spf:
+          surface_floor_tilemap[second_tile_counter].animation.time_counter -= tile.animation.spf
+          if tile.animation.current_frame == tile.animation.frames.len() - 1:
+            surface_floor_tilemap[second_tile_counter].animation.current_frame = 0
+          else:
+            surface_floor_tilemap[second_tile_counter].animation.current_frame += 1
+      second_tile_counter += 1
 
   #echo "\n------------------------------------\n\n", raft_tilemap
 
@@ -108,7 +121,6 @@ proc gameDraw() =
   )
 
   for tile in surface_floor_tilemap:
-    #if tile.coords[0] > 0 and tile.coords[1] > 0 and tile.coords[0] < screenWidth and tile.coords[1] < screenHeight:
     if 
       tile.coords[0] > (0 + the_player.position[0] - toInt((screenWidth / 2)) - 10) and
       tile.coords[1] > (0 + the_player.position[1] - toInt((screenHeight / 2)) - 10) and
@@ -116,7 +128,10 @@ proc gameDraw() =
       tile.coords[1] < (toInt(screenHeight / 2) + the_player.position[1] + 10)
       :
       setSpritesheet(spritesheetID[tile.spritesheet])
-      spr(tile.sprite, tile.coords[0], tile.coords[1])
+      if tile.animated:
+        spr(tile.animation.frames[tile.animation.current_frame], tile.coords[0], tile.coords[1])
+      else:
+        spr(tile.sprite, tile.coords[0], tile.coords[1])
 
   the_player.draw_shadow()
 

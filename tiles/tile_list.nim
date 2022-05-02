@@ -46,6 +46,22 @@ proc wooden_wall*(position: array[2, int]): Tile =
     animated: false
   )
 
+# Liquids
+proc water*(position: array[2, int]): Tile =
+  return Tile(
+    tile: TileType.WATER,
+    coords: position.create_tile_pos(),
+    spritesheet: "liquids",
+    sprite: 0,
+    animated: true,
+    animation: TileAnimation(
+      spf: 0.7,
+      frames: @[0, 1, 2, 1],
+      current_frame: 0,
+      time_counter: 0.0
+    )
+  )
+
 # Surface floor
 proc grass_floor*(position: array[2, int]): Tile =
   randomize()
