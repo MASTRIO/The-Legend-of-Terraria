@@ -4,21 +4,27 @@ import ../data
 
 type
   Player* = object
+    is_moving*: bool
     position*: array[2, int]
     velocity*: array[2, int]
     speed*: int
 
 proc update*(player: Player): Player =
   var player = player
+  player.is_moving = false
 
   if key(K_a):
     player.velocity[0] -= 1
+    player.is_moving = true
   if key(K_d):
     player.velocity[0] += 1
+    player.is_moving = true
   if key(K_w):
     player.velocity[1] -= 1
+    player.is_moving = true
   if key(K_s):
     player.velocity[1] += 1
+    player.is_moving = true
 
   return player
 

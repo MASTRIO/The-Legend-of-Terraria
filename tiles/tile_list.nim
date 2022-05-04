@@ -1,6 +1,8 @@
 import std/random
 import tile
 
+proc air
+
 #* Objects
 proc chippys_couch*(position: array[2, int]): Tile =
   return Tile(
@@ -63,6 +65,15 @@ proc water*(position: array[2, int]): Tile =
   )
 
 # Surface floor
+proc dirt*(position: array[2, int]): Tile =
+  return Tile(
+    tile: TileType.DIRT,
+    coords: position.create_tile_pos(),
+    spritesheet: "surface_ground",
+    sprite: 10,
+    animated: false
+  )
+
 proc grass_floor*(position: array[2, int]): Tile =
   randomize()
 

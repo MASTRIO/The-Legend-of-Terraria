@@ -14,7 +14,14 @@ let spritesheetID* = {
   "liquids": 7
 }.toTable
 
+#var frame_counters = {
+#  "torch": 0,
+#  "water": 0
+#}.toTable()
+
 # Tilemaps
+var loaded_tilemap* = @[grass_floor([0, 0])]
+
 var surface_floor_tilemap* = @[grass_floor([0, 0])]
 
 var surface_wall_tilemap* = @[

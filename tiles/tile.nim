@@ -16,6 +16,7 @@ type
     WATER
 
     # Surface floor
+    DIRT
     GRASS_FLOOR
 
   TileAnimation* = object
