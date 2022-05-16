@@ -91,7 +91,7 @@ proc gameUpdate(dt: float32) =
         tile.coords[0] < (toInt(screenWidth / 2) + the_player.position[0] + 10) and
         tile.coords[1] < (toInt(screenHeight / 2) + the_player.position[1] + 10)
         :
-        
+        loaded_tilemap.add(tile)
 
   # Tile animation processing
   var tile_counter = 0

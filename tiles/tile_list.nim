@@ -1,8 +1,6 @@
 import std/random
 import tile
 
-proc air
-
 #* Objects
 proc chippys_couch*(position: array[2, int]): Tile =
   return Tile(
