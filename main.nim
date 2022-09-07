@@ -181,5 +181,5 @@ nico.init("mastrio", "legend_of_terraria")
 #fixedSize(true)
 #integerScale(true)
 
-nico.createWindow("The Legend of Terraria", 330, 170, 3, false)
+nico.createWindow("The Legend of Terraria", 170, 150, 3, false)
 nico.run(gameInit, gameUpdate, gameDraw)
